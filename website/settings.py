@@ -37,8 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'UserManage',
-    'LolSpider',
-    'MyPhaser'
+    'south',
+    'Goods',
 )
 
 
