@@ -1,4 +1,4 @@
-#coding :utf-8
+#coding=utf-8
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render_to_response,RequestContext
@@ -14,18 +14,18 @@ def Manage(request):
         from Goods.models import Goods
         from django.utils import timezone
 
-        goods_name = request.POST['goods_name']
-        category_name = request.POST['category_name']
+        goods_name = request.POST['goods_name'].strip()
+        category_name = request.POST['category_name'].strip()
         oneToCreate = Goods(goods_name=goods_name,
                             category_name=category_name,
-                            goods_id=str(timezone.now())[:-6].replace(' ','-').replace('.','-').replace(',','-')+"-"+str(request.POST['goods_name'])
+                            goods_id=str(timezone.now())[:-6].replace(' ','-').replace('.','-').replace(',','-').replace(':','-')
                             )
         oneToCreate.save()
         return HttpResponseRedirect(reverse('goodsmanage'))
 
     else:
         from Goods.models import Goods,Purchase
-        from Goods.forms import GoodsForm,PurchaseForm
+        from Goods.forms import GoodsForm,PurchaseForm,SaleForm
         goodslist = Goods.objects.all()
         purchaselist = Purchase.objects.all()
         kwvars = {
@@ -34,6 +34,7 @@ def Manage(request):
             'request':request,
             'goodsform':GoodsForm(),
             'purchaseform':PurchaseForm(),
+            'saleform':SaleForm(),
         }
 
         return render_to_response('Goods/GoodsManage.html',kwvars,RequestContext(request))

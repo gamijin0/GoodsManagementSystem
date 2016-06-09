@@ -53,7 +53,7 @@
     <div class="panel">
 
 
-      <table class="table table-responsive" id="mytable">
+      <table class="table table-responsive" id="goodsmanagetable">
 
         <thead>
             <tr>
@@ -61,26 +61,34 @@
                 <th>货物类型</th>
                 <th>库存</th>
                 <th>进货</th>
+                <th>销售</th>
                 <th>删除</th>
             </tr>
         </thead>
 
-        {% for item in goodslist %}
+        {% for goodsitem in goodslist %}
             <tr>
-                <th>{{ item.goods_name }}</th>
-                <th>{{ item.category_name }}</th>
+                <th>{{ goodsitem.goods_name }}</th>
+                <th>{{ goodsitem.category_name }}</th>
                 <th>
                      {% for purchasedItem in purchaselist %}
-                         {% if item.goods_id == purchasedItem.goods_id %}
-                         价格：{{ purchasedItem.purchase_price }}元
-                         数量：{{ purchasedItem.purchase_num }}
+                         {% if goodsitem.goods_id == purchasedItem.goods_id %}
+                             <table class="table table-condensed table-hover">
+                             <tr>
+                                 <th>价格：{{ purchasedItem.purchase_price }}元</th>
+                                 <th>数量：{{ purchasedItem.purchase_num }}</th>
+                                 <th>
+                                     <a class="btn btn-danger btn-xs" href={% url 'delpurchase' purchasedItem.purchase_id %}  onclick="return confirm('是否确认删除？')">删除</a>
+                                 </th>
+                             </tr>
+                             </table>
                          {% endif %}
                      {% endfor %}
                 </th>
                 <th>
-                    <a data-toggle="modal" data-target="#purchaseModal" class="btn btn-primary btn-sm ">进货</a>
+                    <a data-toggle="modal" data-target=#id_pu_{{ goodsitem.goods_id }} class="btn btn-primary btn-sm ">进货</a>
                         {#进货模态框#}
-                        <div class="modal fade" id="purchaseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal fade" id=id_pu_{{ goodsitem.goods_id }} tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                <div class="modal-dialog">
                                   <div class="modal-content">
                                      <div class="modal-header">
@@ -88,12 +96,12 @@
                                            aria-hidden="true">×
                                         </button>
                                         <h4 class="modal-title" id="myModalLabel">
-                                           {{ item.category_name }}:{{ item.goods_name }}
+                                           {{ goodsitem.category_name }}:{{ goodsitem.goods_name }}
                                         </h4>
                                      </div>
                                      <div class="modal-body">
                                         {# 进货表单#}
-                                        <form class="form-horizontal" role="form" action={% url "purchase" item.goods_id %} method="POST" >
+                                        <form class="form-horizontal" role="form" action={% url "purchase" goodsitem.goods_id %} method="POST" >
                                             {% csrf_token %}
 
 
@@ -101,7 +109,7 @@
 
                                                     <div class="form-group">
                                                         <label class="control-label col-md-4">{{purchaseItem.label}}</label>
-                                                            {{purchaseItem}}元
+                                                            {{purchaseItem}}
                                                         <div class="col-md-offset-1 col-md-10">
                                                             {{purchaseItem.errors}}
                                                         </div>
@@ -122,7 +130,49 @@
 
                 </th>
                 <th>
-                    <a href={% url 'delgoods' item.goods_id %} class="btn btn-danger btn-sm" onclick="return confirm('是否确认删除？')">删除</a>
+                    <a href="#" data-toggle="modal" data-target=#id_sa_{{ goodsitem.goods_id }}  class="btn btn-success btn-sm">销售</a>
+                    {#销售模态框#}
+                        <div class="modal fade" id=id_sa_{{ goodsitem.goods_id }} tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                               <div class="modal-dialog">
+                                  <div class="modal-content">
+                                     <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                           aria-hidden="true">×
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel">
+                                           {{ goodsitem.category_name }}:{{ goodsitem.goods_name }}
+                                        </h4>
+                                     </div>
+                                     <div class="modal-body">
+                                        {# 销售表单#}
+                                        <form class="form-horizontal" role="form" action={% url "sale" goodsitem.goods_id %} method="POST" >
+                                            {% csrf_token %}
+
+                                                {% for saleItem in saleform %}
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-4">{{saleItem.label}}</label>
+                                                            {{saleItem}}
+                                                        <div class="col-md-offset-1 col-md-10">
+                                                            {{saleItem.errors}}
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+
+                                                <div class="form-group">
+                                                    <div class="col-md-offset-1 col-md-10">
+                                                        <button type="submit" class="btn btn-danger " id="btAddUser">确认</button>
+                                                    </div>
+                                                </div>
+                                        </form>
+
+                                     </div>
+                                  </div><!-- /.modal-content -->
+                               </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+                </th>
+                <th>
+                    <a href={% url 'delgoods' goodsitem.goods_id %} class="btn btn-danger btn-sm" onclick="return confirm('是否确认删除？')">删除</a>
                 </th>
             </tr>
         {% endfor %}

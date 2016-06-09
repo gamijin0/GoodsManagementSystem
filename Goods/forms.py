@@ -24,3 +24,18 @@ class PurchaseForm(forms.Form):
         error_messages={"required": u"价格不能为空"},
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
+
+
+class SaleForm(forms.Form):
+    sale_num = forms.IntegerField(
+        label=u"卖出数量",
+        error_messages={"required": u"数量不能为空"},
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    sale_earn_actual = forms.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        label=u"实际收入",
+        error_messages={"required": u"收入不能为空"},
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )

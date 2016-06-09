@@ -20,10 +20,17 @@ class Purchase(models.Model):
     purchase_id = models.CharField(max_length=50,null=False,primary_key=True)
     purchase_date = models.DateTimeField(auto_now_add=True,null=False)
     goods = models.ForeignKey(Goods,null=False)
-    purchase_num = models.SmallIntegerField(max_length=4,null=False)
+    purchase_num = models.IntegerField(null=False)
     purchase_price =models.DecimalField(max_digits=6,decimal_places=2,null=False)
 
 class ActionRecord(models.Model):
     action_id = models.CharField(max_length=20,null=False,primary_key=True)
     action_date= models.DateTimeField(auto_now_add=True,null=True)
     action_introduciton = models.TextField(max_length=1000,default=None)
+
+class Sale(models.Model):
+    goods = models.ForeignKey(Goods,null=False)
+    sale_date = models.DateTimeField(auto_now_add=True,null=False)
+    sale_num = models.SmallIntegerField(null=False)
+    cost_price = models.DecimalField(max_digits=6,decimal_places=2,null=False)
+    sale_earn_actual = models.DecimalField(max_digits=6,decimal_places=2,null=False)

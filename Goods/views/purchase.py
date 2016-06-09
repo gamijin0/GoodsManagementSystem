@@ -13,7 +13,7 @@ def Purchase(request,goods_id):
     from Goods.models import Goods
     from django.utils import timezone
     oneToPurchase = PurchaseModel(
-        purchase_id=str(timezone.now())[:-6].replace(' ','-').replace(',','-').replace('.','-'),
+        purchase_id=str(timezone.now())[:-6].replace(' ','-').replace(',','-').replace('.','-').replace(':','-'),
         goods=Goods.objects.get(goods_id=goods_id),
         purchase_num=int(request.POST['purchase_num']),
         purchase_price=float(request.POST['purchase_price'])
@@ -21,4 +21,12 @@ def Purchase(request,goods_id):
     print (oneToPurchase.goods.goods_name)
     print "添加了一条进货记录"
     oneToPurchase.save()
+    return HttpResponseRedirect(reverse('goodsmanage'))
+
+@login_required()
+@PermissionVerify()
+def DelPurchase(request,purchase_id):
+    from Goods.models import Purchase as PurchaseModel
+    oneToDel = PurchaseModel.objects.get(purchase_id=purchase_id)
+    PurchaseModel.delete(oneToDel)
     return HttpResponseRedirect(reverse('goodsmanage'))
