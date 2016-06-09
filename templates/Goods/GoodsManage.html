@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Add Role
+{% endblock %}
+
+{% block head %}
+    <script src="/static/js/jquery.bootstrap-duallistbox.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-duallistbox.css">
+{% endblock %}
+
+{% block content %}
+  <table class="table" >
+    <thead>
+        <tr>
+            <th>货物名称</th>
+            <th>货物类型</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {% for item in goodslist %}
+        <tr>
+            <th>{{ item.goods_name }}</th>
+            <th>{{ item.category_name }}</th>
+            <th>
+                <a href="#" class="btn-success">查看库存</a>
+            </th>
+            <th>
+                <a href="#" class="btn-primary">进货</a>
+            </th>
+        </tr>
+    {% endfor %}
+
+  </table>
+
+
+
+{% endblock %}
