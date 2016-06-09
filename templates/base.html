@@ -6,11 +6,35 @@
         <title>{% block title %}{% endblock %}</title>
         
         <!-- Bootstrap -->
-        <link href="/static/css/bootstrap.css" rel="stylesheet">
         <script src="/static/js/jquery-1.11.0.min.js"></script>
+
+        <link href="/static/css/bootstrap.css" rel="stylesheet">
         <script src="/static/js/bootstrap.min.js"></script>
-        
+
+
+        <link href="/static/css/jquery.dataTables.min.css">
+        <script src="/static/js/jquery.dataTables.min.js"></script>
+
+        <link href="/static/css/dataTables.bootstrap.min.css">
+        <script src="/static/js/dataTables.bootstrap.min.js"></script>
+
+
+        <script>
+            $(document).ready(function(){
+                $('#mytable').dataTable({
+                    "aoColumnDefs":[
+                        {   "sWidth": "20%","aTargets":[0]},
+                        {   "sWidth": "20%","aTargets":[1]},
+                        {   "sWidth": "20%","aTargets":[2]},
+                      ],
+                    "sScrollY": "500px",
+                    "sScrollX": "100%",
+                })
+            });
+        </script>
+
         {% block head %}{% endblock %}
+
         <style type="text/css">
             body {
                 padding-top: 70px;

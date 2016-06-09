@@ -1,39 +1,134 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Add Role
-{% endblock %}
-
-{% block head %}
-    <script src="/static/js/jquery.bootstrap-duallistbox.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-duallistbox.css">
+    货物管理
 {% endblock %}
 
 {% block content %}
-  <table class="table" >
-    <thead>
-        <tr>
-            <th>货物名称</th>
-            <th>货物类型</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
 
-    {% for item in goodslist %}
-        <tr>
-            <th>{{ item.goods_name }}</th>
-            <th>{{ item.category_name }}</th>
-            <th>
-                <a href="#" class="btn-success">查看库存</a>
-            </th>
-            <th>
-                <a href="#" class="btn-primary">进货</a>
-            </th>
-        </tr>
-    {% endfor %}
+    <a data-toggle="modal" data-target="#addgoodsModal" class="btn btn-primary"><span class=" glyphicon glyphicon-edit"></span>新建货物</a>
 
-  </table>
+    <div class="modal fade" id="addgoodsModal" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel" aria-hidden="true">
+       <div class="modal-dialog">
+          <div class="modal-content">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                   aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                   新建货物
+                </h4>
+             </div>
+             <div class="modal-body">
+
+                <form class="form-horizontal" role="form" action={% url "goodsmanage" %} method="POST" >
+                    {% csrf_token %}
+
+                        {% for item in goodsform %}
+                            <div class="form-group">
+                                <label class="control-label col-md-1">{{item.label}}</label>
+                                <div class="col-md-6">
+                                    {{item}}
+                                </div>
+                                <div class="col-md-offset-1 col-md-10">
+                                    {{item.errors}}
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <div class="form-group">
+                            <div class="col-md-offset-1 col-md-10">
+                                <button type="submit" class="btn btn-danger " id="btAddUser">新 增</button>
+                            </div>
+                        </div>
+                </form>
+
+             </div>
+          </div><!-- /.modal-content -->
+       </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <div class="panel">
+
+
+      <table class="table table-responsive" id="mytable">
+
+        <thead>
+            <tr>
+                <th>货物名称</th>
+                <th>货物类型</th>
+                <th>库存</th>
+                <th>进货</th>
+                <th>删除</th>
+            </tr>
+        </thead>
+
+        {% for item in goodslist %}
+            <tr>
+                <th>{{ item.goods_name }}</th>
+                <th>{{ item.category_name }}</th>
+                <th>
+                     {% for purchasedItem in purchaselist %}
+                         {% if item.goods_id == purchasedItem.goods_id %}
+                         价格：{{ purchasedItem.purchase_price }}元
+                         数量：{{ purchasedItem.purchase_num }}
+                         {% endif %}
+                     {% endfor %}
+                </th>
+                <th>
+                    <a data-toggle="modal" data-target="#purchaseModal" class="btn btn-primary btn-sm ">进货</a>
+                        {#进货模态框#}
+                        <div class="modal fade" id="purchaseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                               <div class="modal-dialog">
+                                  <div class="modal-content">
+                                     <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                           aria-hidden="true">×
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel">
+                                           {{ item.category_name }}:{{ item.goods_name }}
+                                        </h4>
+                                     </div>
+                                     <div class="modal-body">
+                                        {# 进货表单#}
+                                        <form class="form-horizontal" role="form" action={% url "purchase" item.goods_id %} method="POST" >
+                                            {% csrf_token %}
+
+
+                                                {% for purchaseItem in purchaseform %}
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-4">{{purchaseItem.label}}</label>
+                                                            {{purchaseItem}}元
+                                                        <div class="col-md-offset-1 col-md-10">
+                                                            {{purchaseItem.errors}}
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+
+                                                <div class="form-group">
+                                                    <div class="col-md-offset-1 col-md-10">
+                                                        <button type="submit" class="btn btn-danger " id="btAddUser">进货</button>
+                                                    </div>
+                                                </div>
+                                        </form>
+
+                                     </div>
+                                  </div><!-- /.modal-content -->
+                               </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+
+                </th>
+                <th>
+                    <a href={% url 'delgoods' item.goods_id %} class="btn btn-danger btn-sm" onclick="return confirm('是否确认删除？')">删除</a>
+                </th>
+            </tr>
+        {% endfor %}
+
+      </table>
+    </div>
 
 
 

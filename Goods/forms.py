@@ -10,3 +10,17 @@ class GoodsForm(forms.Form):
                                    error_messages={"required":u"类型不能未空"},
                                    widget=forms.TextInput(attrs={"class":"form-control"}),
                                    )
+
+class PurchaseForm(forms.Form):
+    purchase_num = forms.IntegerField(
+        label=u"进货数量",
+        error_messages = {"required": u"数量不能为空"},
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    purchase_price=forms.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        label=u"进货价格",
+        error_messages={"required": u"价格不能为空"},
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
