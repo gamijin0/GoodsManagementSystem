@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response,RequestContext
 from django.contrib.auth.decorators import login_required
 from website.common.CommonPaginator import SelfPaginator
 from UserManage.views.permission import PermissionVerify
+from django.utils import timezone
 
 @login_required()
 @PermissionVerify()
@@ -16,8 +17,8 @@ def Sale(request,goods_id):
 
     #先统计所有剩余数量
     remain_num_total =0
-    actual_earn = request.POST['sale_earn_actual']
-    want_to_sell_num =request.POST['sale_num']
+    actual_earn = float(request.POST['sale_earn_actual'])
+    want_to_sell_num =int(request.POST['sale_num'])
 
     for p in purchaseList:
         remain_num_total+=p.purchase_num
@@ -31,6 +32,7 @@ def Sale(request,goods_id):
             if(want_to_sell_num>=p.purchase_num):
                 #某一价格的被售完
                 oneToSale = SaleModel(
+                    sale_id=str(timezone.now())[:-6].replace(' ','-').replace(',','-').replace('.','-').replace(':','-'),
                     goods=goods,
                     sale_num=p.purchase_num,
                     cost_price=p.purchase_price,
@@ -42,7 +44,7 @@ def Sale(request,goods_id):
             else:
                 #剩余某一价格
                 oneToSale = SaleModel(
-                    goods=goods,
+                    sale_id=str(timezone.now())[:-6].replace(' ','-').replace(',','-').replace('.','-').replace(':','-'),                    goods=goods,
                     sale_num=want_to_sell_num,
                     cost_price=p.purchase_price,
                     sale_earn_actual=actual_earn,
@@ -50,5 +52,6 @@ def Sale(request,goods_id):
                 oneToSale.save()
                 p.purchase_num-=want_to_sell_num
                 p.save()
+                break
 
         return HttpResponseRedirect(reverse('goodsmanage'))

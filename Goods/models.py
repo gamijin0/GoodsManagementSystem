@@ -29,6 +29,7 @@ class ActionRecord(models.Model):
     action_introduciton = models.TextField(max_length=1000,default=None)
 
 class Sale(models.Model):
+    sale_id=models.CharField(max_length=50,primary_key=True,null=False)
     goods = models.ForeignKey(Goods,null=False)
     sale_date = models.DateTimeField(auto_now_add=True,null=False)
     sale_num = models.SmallIntegerField(null=False)

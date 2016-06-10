@@ -1,10 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}
+    货物管理
+{% endblock %}
+
+{% block content %}
+
+
+    <table class="table table-responsive table-hover" id="collecttable">
+    <thead>
+        <tr>
+            <th>货物名称</th>
+            <th>货物类型</th>
+            <th>售出数量</th>
+            <th>成本</th>
+            <th>实际收入</th>
+            <th>售出时间</th>
+            <th>删除</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for saleItem in salelist %}
+            <tr>
+                <th>{{ saleItem.goods.goods_name }}</th>
+                <th>{{ saleItem.goods.category_name }}</th>
+                <th>{{ saleItem.sale_num }}</th>
+                <th>{% widthratio saleItem.cost_price 1 saleItem.sale_num %}</th>
+                <th>{{ saleItem.sale_earn_actual }}</th>
+                <th>{{ saleItem.sale_date }}</th>
+                <th>
+                    <a class="btn btn-danger btn-xs" onclick="return confirm('是否确认删除？')" href={% url 'delsale' saleItem.sale_id %} >删除</a>
+                </th>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+    </table>
+
+{% endblock %}

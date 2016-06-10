@@ -7,5 +7,7 @@ urlpatterns = patterns('Goods.views',
     url(r'^purchase/(.+)/$','purchase.Purchase',name='purchase'),
     url(r'^delpurchase/(.+)/$','purchase.DelPurchase',name='delpurchase'),
     url(r'^sale/(.+)/$','sale.Sale',name='sale'),
+    url(r'^collect/$','collect.SaleCollect',name='collect'),
+    url(r'^delsale/(.+)/$','collect.DelSale',name='delsale'),
 
 )

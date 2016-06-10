@@ -16,5 +16,12 @@ def SaleCollect(request):
         'request': request,
         'salelist':salelist
     }
-    return render_to_response('Goods/GoodsManage.html', kwvars, RequestContext(request))
+    return render_to_response('Goods/Collect.html', kwvars, RequestContext(request))
 
+@login_required()
+@PermissionVerify()
+def DelSale(request,sale_id):
+    from Goods.models import Sale as SaleModel
+    oneToDel = SaleModel.objects.get(sale_id=sale_id)
+    SaleModel.delete(oneToDel)
+    return HttpResponseRedirect(reverse('collect'))
